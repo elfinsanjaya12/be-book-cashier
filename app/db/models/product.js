@@ -13,12 +13,45 @@ module.exports = (sequelize, DataTypes) => {
   }
   Product.init(
     {
-      title: DataTypes.STRING,
-      auhtor: DataTypes.STRING,
-      cover: DataTypes.STRING,
-      published: DataTypes.DATE,
-      price: DataTypes.FLOAT,
-      stock: DataTypes.INTEGER,
+      title: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: { msg: 'Please enter your title' },
+        },
+      },
+      auhtor: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: { msg: 'Please enter your auhtor' },
+        },
+      },
+      cover: {
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: { msg: 'Please enter your cover' },
+        },
+      },
+      published: {
+        type: DataTypes.DATE,
+        validate: {
+          notEmpty: { msg: 'Please enter your published' },
+          isDate: { msg: 'Please enter your date' },
+        },
+      },
+      price: {
+        type: DataTypes.FLOAT,
+        validate: {
+          notEmpty: { msg: 'Please enter your price' },
+          isNumeric: { msg: 'Please enter your price is number' },
+        },
+      },
+      stock: {
+        type: DataTypes.INTEGER,
+        validate: {
+          notEmpty: { msg: 'Please enter your stock' },
+          isNumeric: { msg: 'Please enter your stock is number' },
+        },
+      },
       user: DataTypes.INTEGER,
       category: DataTypes.INTEGER,
     },
@@ -27,5 +60,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'Product',
     }
   );
+
   return Product;
 };

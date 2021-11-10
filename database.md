@@ -10,26 +10,26 @@ categories :
 
 - id int
 - name string
-- userId int
+- user int
 
 products :
 
 - id int
-- categoryId int
+- category int
 - title string
 - auhtor string
 - image string
 - published date
 - price int
 - stock
-- userId int
+- user int
 
 detail-transactions :
 
 - id
-- transactionId int
-- productId int
-- productHistoryId int
+- transaction int
+- product int
+- productHistory int
 - titleProduct string
 - auhtorProduct string
 - imageProduct string
@@ -41,4 +41,4 @@ transactions :
 - id int
 - invoice string
 - date date
-- userId int
+- user int

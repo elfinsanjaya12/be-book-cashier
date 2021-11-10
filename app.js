@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const categoriesRouter = require('./app/api/categories/router');
 const authRouter = require('./app/api/auth/router');
+const productsRouter = require('./app/api/products/router');
+const uploadsRouter = require('./app/api/uploads/router');
 const dotenv = require('dotenv');
 
 const URL = '/api/v1';
@@ -23,6 +25,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(`${URL}/categories`, categoriesRouter);
 app.use(`${URL}/auth`, authRouter);
+app.use(`${URL}/products`, productsRouter);
+app.use(`${URL}/uploads`, uploadsRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
