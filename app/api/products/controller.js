@@ -1,4 +1,4 @@
-const { Product, Category, User } = require('../../db/models');
+const { Product, Category } = require('../../db/models');
 const { StatusCodes } = require('http-status-codes');
 const { BadRequestError, NotFoundError } = require('../../errors');
 const { Op } = require('sequelize');

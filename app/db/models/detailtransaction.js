@@ -9,13 +9,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      DetailTransaction.belongsTo(models.Transaction, {
+        foreignKey: 'transaction',
+      });
     }
   }
   DetailTransaction.init(
     {
-      productHistoryId: DataTypes.INTEGER,
+      productHistoryId: {
+        type: DataTypes.INTEGER,
+        validate: {
+          notEmpty: { msg: 'Please enter your productHistoryId' },
+          isNumeric: { msg: 'harus number' },
+        },
+      },
       titleProduct: DataTypes.STRING,
-      auhtor: DataTypes.STRING,
+      auhtorProduct: DataTypes.STRING,
       coverImage: DataTypes.STRING,
       priceProduct: DataTypes.INTEGER,
       quantity: DataTypes.INTEGER,

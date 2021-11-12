@@ -14,7 +14,7 @@ module.exports = {
       titleProduct: {
         type: Sequelize.STRING,
       },
-      auhtor: {
+      auhtorProduct: {
         type: Sequelize.STRING,
       },
       coverImage: {
