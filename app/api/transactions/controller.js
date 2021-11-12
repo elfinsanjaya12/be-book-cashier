@@ -95,6 +95,9 @@ const createTransactions = async (req, res, next) => {
       updateStock.push({
         id: payload[i].productId,
         stock: checkingProduct.stock - payload[i].quantity,
+        sold: checkingProduct.sold
+          ? checkingProduct.sold + payload[i].quantity
+          : payload[i].quantity,
         title: checkingProduct.title,
         auhtor: checkingProduct.auhtor,
         cover: checkingProduct.cover,
@@ -119,7 +122,7 @@ const createTransactions = async (req, res, next) => {
     }
 
     if (errorProductIdStock.length !== 0) {
-      throw new NotFoundError(
+      throw new BadRequestError(
         `stock tidak cukup id ${errorProductIdStock.join(', ')}`
       );
     }
@@ -127,7 +130,7 @@ const createTransactions = async (req, res, next) => {
     await Product.bulkCreate(
       updateStock,
       {
-        updateOnDuplicate: ['stock'],
+        updateOnDuplicate: ['stock', 'sold'],
       },
       { transaction: t }
     );

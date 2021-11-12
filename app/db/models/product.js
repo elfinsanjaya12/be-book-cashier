@@ -52,6 +52,10 @@ module.exports = (sequelize, DataTypes) => {
           isNumeric: { msg: 'Please enter your stock is number' },
         },
       },
+      sold: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
       user: DataTypes.INTEGER,
       category: DataTypes.INTEGER,
     },

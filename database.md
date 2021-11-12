@@ -23,6 +23,7 @@ products :
 - price int
 - stock
 - user int
+- sold
 
 detail-transactions :
 
