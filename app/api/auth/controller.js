@@ -1,6 +1,6 @@
 const { User } = require('../../db/models');
 const { StatusCodes } = require('http-status-codes');
-const { BadRequestError, UnauthenticatedError } = require('../../errors');
+const { BadRequestError, UnauthorizedError } = require('../../errors');
 const { createTokenUser, createJWT } = require('../../utils');
 
 const signin = async (req, res, next) => {
@@ -12,12 +12,12 @@ const signin = async (req, res, next) => {
     }
     const user = await User.findOne({ where: { email: email } });
     if (!user) {
-      throw new UnauthenticatedError('Invalid Credentials');
+      throw new UnauthorizedError('Invalid Credentials');
     }
     const isPasswordCorrect = user.checkPassword(password, user.password);
 
     if (!isPasswordCorrect) {
-      throw new UnauthenticatedError('Invalid Credentials');
+      throw new UnauthorizedError('Invalid Credentials');
     }
     // compare password
     const tokenUser = createTokenUser(user);

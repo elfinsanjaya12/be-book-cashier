@@ -33,18 +33,19 @@ const getAllProducts = async (req, res, next) => {
 
 const createProducts = async (req, res, next) => {
   try {
-    const { userId } = req.user;
+    let user = req.user.userId;
     const { title, auhtor, published, price, stock, category, cover } =
       req.body;
 
     const checkingCategory = await Category.findOne({
-      where: { id: category, user: userId },
+      where: { id: category, user: user },
     });
 
-    if (!checkingCategory) throw new NotFoundError('id category not found');
+    if (!checkingCategory)
+      throw new NotFoundError(`No category with id : ${id} and user : ${user}`);
 
     const chekcingName = await Product.findOne({
-      where: { title, user: userId },
+      where: { title, user: user },
     });
 
     if (chekcingName) throw new BadRequestError('duplicate title');
@@ -57,7 +58,7 @@ const createProducts = async (req, res, next) => {
       stock,
       cover,
       category,
-      user: userId,
+      user: user,
     });
 
     res.status(StatusCodes.CREATED).json({ data: products });
@@ -68,13 +69,15 @@ const createProducts = async (req, res, next) => {
 
 const getOneProducts = async (req, res, next) => {
   try {
+    let user = req.user.userId;
     const { id } = req.params;
 
     const checkingProduct = await Product.findOne({
-      where: { id: id, user: req.user.userId },
+      where: { id: id, user: user },
     });
 
-    if (!checkingProduct) throw new NotFoundError('id product not found');
+    if (!checkingProduct)
+      throw new NotFoundError(`No product with id : ${id} and user : ${user}`);
 
     res.status(StatusCodes.OK).json({ data: checkingProduct });
   } catch (err) {
@@ -84,28 +87,27 @@ const getOneProducts = async (req, res, next) => {
 
 const updateProducts = async (req, res, next) => {
   try {
-    const { userId } = req.user;
+    const user = req.user.userId;
     const { id } = req.params;
     const { title, auhtor, published, price, stock, category, cover } =
       req.body;
 
     const checkingCategory = await Category.findOne({
-      where: { id: category, user: userId },
+      where: { id: category, user: user },
     });
 
-    if (!checkingCategory) throw new NotFoundError('id category not found');
+    if (!checkingCategory)
+      throw new NotFoundError(`No category with id : ${id} and user : ${user}`);
 
     const checkingProduct = await Product.findOne({
-      where: { id, user: userId },
+      where: { id, user: user },
     });
 
     if (!checkingProduct)
-      throw new NotFoundError(
-        `No product with id : ${id} and user : ${userId}`
-      );
+      throw new NotFoundError(`No product with id : ${id} and user : ${user}`);
 
     const chekcingProductName = await Product.findOne({
-      where: { title, user: userId, id: { [Op.ne]: id } },
+      where: { title, user: user, id: { [Op.ne]: id } },
     });
 
     if (chekcingProductName) {
@@ -121,7 +123,7 @@ const updateProducts = async (req, res, next) => {
 
     await checkingProduct.save();
 
-    res.status(StatusCodes.CREATED).json({ data: checkingProduct });
+    res.status(StatusCodes.OK).json({ data: checkingProduct });
   } catch (err) {
     next(err);
   }

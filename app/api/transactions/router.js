@@ -7,6 +7,6 @@ router
   .route('/')
   .get(authenticateUser, controller.getAllTransactions)
   .post(authenticateUser, controller.createTransactions);
-router.route('/:id').get(authenticateUser, controller.getOneTransactions);
+router.route('/:id').get(authenticateUser, controller.getDetailTransactions);
 
 module.exports = router;

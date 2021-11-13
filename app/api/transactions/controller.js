@@ -6,11 +6,11 @@ const sequelize = require('../../db/models').sequelize;
 
 const getAllTransactions = async (req, res, next) => {
   try {
-    const { userId } = req.user;
+    const user = req.user.userId;
     let { keyword = '' } = req.query;
 
     let condition = {
-      user: userId,
+      user: user,
     };
 
     if (keyword !== '') {
@@ -31,13 +31,14 @@ const getAllTransactions = async (req, res, next) => {
     next(err);
   }
 };
-const getOneTransactions = async (req, res, next) => {
+
+const getDetailTransactions = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { userId } = req.user;
+    const user = req.user.userId;
     let condition = {
       id: id,
-      user: userId,
+      user: user,
     };
 
     const transactions = await Transaction.findAll({
@@ -66,13 +67,13 @@ const createTransactions = async (req, res, next) => {
   const t = await sequelize.transaction();
   try {
     const { payload } = req.body;
-    const { userId } = req.user;
+    const user = req.user.userId;
 
     const transaction = await Transaction.create(
       {
         invoice: `T-${Math.floor(100000 + Math.random() * 900000)}`,
         date: new Date(),
-        user: req.user.userId,
+        user: user,
       },
       { transaction: t }
     );
@@ -117,13 +118,17 @@ const createTransactions = async (req, res, next) => {
 
     if (errorProductIdNotFound.length !== 0) {
       throw new NotFoundError(
-        `id product not found : ${errorProductIdNotFound.join(', ')}`
+        `No product with id : ${errorProductIdNotFound.join(
+          ', '
+        )} and user : ${user}`
       );
     }
 
     if (errorProductIdStock.length !== 0) {
       throw new BadRequestError(
-        `stock tidak cukup id ${errorProductIdStock.join(', ')}`
+        `product stock is not enough with id : ${errorProductIdStock.join(
+          ', '
+        )}  and user : ${user}`
       );
     }
 
@@ -149,4 +154,8 @@ const createTransactions = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllTransactions, createTransactions, getOneTransactions };
+module.exports = {
+  getAllTransactions,
+  createTransactions,
+  getDetailTransactions,
+};

@@ -5,10 +5,13 @@ const { BadRequestError, NotFoundError } = require('../../errors');
 const { Op } = require('sequelize');
 const { extendMoment } = require('moment-range');
 let MomentRange = extendMoment(moment);
+const sequelize = require('../../db/models').sequelize;
 
 const getDashboard = async (req, res, next) => {
   try {
-    const condition = { user: req.user.userId };
+    /** Chart 1 minggu */
+    const user = req.user.userId;
+    const condition = { user: user };
 
     let startDate = moment().startOf('week').toDate();
     let endDate = moment().endOf('week').toDate();
@@ -65,16 +68,55 @@ const getDashboard = async (req, res, next) => {
       });
     }
 
-    const bestProduct = await Product.findAll({
-      where: { user: req.user.userId, sold: { [Op.gt]: 0 } },
-      attributes: ['id', 'title', 'cover', 'price', 'sold'],
-      order: [['sold', 'DESC']],
+    /* penjualan terlaris */
+    const bestProduct = await DetailTransaction.findAll({
+      include: {
+        model: Transaction,
+        attributes: [],
+        where: { user: user },
+      },
+
+      group: [
+        'DetailTransaction.productHistoryId',
+        'DetailTransaction.titleProduct',
+      ],
+
+      attributes: [
+        'titleProduct',
+        'priceProduct',
+        'coverImage',
+        [sequelize.fn('sum', sequelize.col('quantity')), 'total_quantity'],
+      ],
+      order: [['quantity', 'DESC']],
       limit: 4,
+    });
+
+    let start = moment().startOf('month').toDate();
+    let end = moment().endOf('month').toDate();
+
+    const bestMonth = await DetailTransaction.findAll({
+      include: {
+        model: Transaction,
+        attributes: [],
+        where: { user: user, date: { [Op.between]: [start, end] } },
+      },
+
+      group: [
+        'DetailTransaction.productHistoryId',
+        'DetailTransaction.titleProduct',
+      ],
+
+      attributes: [
+        'titleProduct',
+        'priceProduct',
+        [sequelize.fn('sum', sequelize.col('quantity')), 'total_quantity'],
+      ],
+      order: [['quantity', 'DESC']],
     });
 
     res
       .status(StatusCodes.OK)
-      .json({ data: { chart: dataGroup, bestProduct } });
+      .json({ data: { chart: dataGroup, bestProduct, bestMonth } });
   } catch (err) {
     next(err);
   }
