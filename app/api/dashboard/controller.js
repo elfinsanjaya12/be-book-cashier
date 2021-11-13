@@ -91,14 +91,19 @@ const getDashboard = async (req, res, next) => {
       limit: 4,
     });
 
-    let start = moment().startOf('month').toDate();
-    let end = moment().endOf('month').toDate();
-
     const bestMonth = await DetailTransaction.findAll({
       include: {
         model: Transaction,
         attributes: [],
-        where: { user: user, date: { [Op.between]: [start, end] } },
+        where: {
+          user: user,
+          date: {
+            [Op.between]: [
+              moment().startOf('month').toDate(),
+              moment().endOf('month').toDate(),
+            ],
+          },
+        },
       },
 
       group: [
