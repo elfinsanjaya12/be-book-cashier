@@ -32,6 +32,10 @@ module.exports = {
       category: {
         type: Sequelize.INTEGER,
       },
+      sold: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
