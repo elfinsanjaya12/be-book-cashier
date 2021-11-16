@@ -33,7 +33,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       sold: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         defaultValue: 0,
       },
       createdAt: {
