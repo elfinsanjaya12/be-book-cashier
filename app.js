@@ -9,6 +9,7 @@ const uploadsRouter = require('./app/api/uploads/router');
 const transactionsRouter = require('./app/api/transactions/router');
 const dashboardsRouter = require('./app/api/dashboard/router');
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 const URL = '/api/v1';
 const app = express();
@@ -18,7 +19,7 @@ dotenv.config();
 // middleware
 const notFoundMiddleware = require('./app/middlewares/not-found');
 const errorHandlerMiddleware = require('./app/middlewares/error-handler');
-
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
