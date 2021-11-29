@@ -67,6 +67,8 @@ const createTransactions = async (req, res, next) => {
   const t = await sequelize.transaction();
   try {
     const { payload } = req.body;
+    console.log('req.user');
+    console.log(req.user);
     const user = req.user.userId;
 
     const transaction = await Transaction.create(
@@ -83,7 +85,7 @@ const createTransactions = async (req, res, next) => {
     let updateStock = [];
     for (let i = 0; i < payload.length; i++) {
       const checkingProduct = await Product.findOne({
-        where: { id: payload[i].productId, user: userId },
+        where: { id: payload[i].productId, user: user },
       });
 
       payload[i].transaction = transaction.id;
