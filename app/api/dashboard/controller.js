@@ -76,6 +76,7 @@ const getDashboard = async (req, res, next) => {
       },
 
       group: [
+        'DetailTransaction.id',
         'DetailTransaction.productHistoryId',
         'DetailTransaction.titleProduct',
       ],
@@ -106,6 +107,7 @@ const getDashboard = async (req, res, next) => {
       },
 
       group: [
+        'DetailTransaction.id',
         'DetailTransaction.productHistoryId',
         'DetailTransaction.titleProduct',
       ],
@@ -122,6 +124,7 @@ const getDashboard = async (req, res, next) => {
       .status(StatusCodes.OK)
       .json({ data: { chart: dataGroup, bestProduct, bestMonth } });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };
