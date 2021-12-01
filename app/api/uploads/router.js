@@ -12,4 +12,12 @@ router
     controller.uploadProductImage
   );
 
+router
+  .route('/cloudinary')
+  .post(
+    authenticateUser,
+    upload.single('image'),
+    controller.uploadImageCloudinary
+  );
+
 module.exports = router;
