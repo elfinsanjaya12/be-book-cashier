@@ -114,6 +114,7 @@ const updateProducts = async (req, res, next) => {
       throw new BadRequestError('duplicate name');
     }
 
+    checkingProduct.category = category;
     checkingProduct.title = title;
     checkingProduct.auhtor = auhtor;
     checkingProduct.published = published;

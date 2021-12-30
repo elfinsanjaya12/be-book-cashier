@@ -6,6 +6,7 @@ const { Op } = require('sequelize');
 const getAllCategories = async (req, res, next) => {
   try {
     const { userId } = req.user;
+
     const { limit = 5 } = req.query;
 
     const categories = await Category.findAll({
