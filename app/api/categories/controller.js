@@ -6,11 +6,18 @@ const { Op } = require('sequelize');
 const getAllCategories = async (req, res, next) => {
   try {
     const { userId } = req.user;
+    let { limit = 5, keyword = '' } = req.query;
 
-    const { limit = 5 } = req.query;
+    let condition = {
+      user: userId,
+    };
+
+    if (keyword !== '') {
+      condition = { ...condition, name: { [Op.like]: `%${keyword}%` } };
+    }
 
     const categories = await Category.findAll({
-      where: { user: userId },
+      where: condition,
       attributes: ['id', 'name'],
       limit: Number(limit),
     });
